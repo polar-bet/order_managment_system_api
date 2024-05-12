@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Chat;
 use App\Models\User;
-use App\Models\Category;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('chat_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Category::class);
             $table->foreignIdFor(User::class);
-            $table->mediumText('name');
-            $table->decimal('price');
-            $table->integer('count');
+            $table->foreignIdFor(Chat::class);
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('chat_users');
     }
 };
