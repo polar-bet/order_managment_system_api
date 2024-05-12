@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Product::class);
             $table->mediumText('destination');
-            $table->string('status');
+            $table->tinyInteger('status');
             $table->integer('count');
             $table->timestamps();
         });
