@@ -2,7 +2,9 @@
 
 namespace App\Services\Account;
 
+use Carbon\Carbon;
 use App\Models\User;
+use App\Enums\TokenAbility;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -37,10 +39,6 @@ class AccountService
 
         $user = $token->tokenable;
 
-        if (!$token->can('refresh')) {
-            return response()->json(['message' => 'invalid token'], Response::HTTP_FORBIDDEN);
-        }
-
         return $this->createToken($user);
     }
 
@@ -53,13 +51,12 @@ class AccountService
     {
         $user->tokens()->delete();
 
-        $accessToken = $user->createToken('accessToken')->plainTextToken;
-
-        $refreshToken = $user->createToken('refreshToken', ['refresh'])->plainTextToken;
+        $accessToken = $user->createToken('access_token', [TokenAbility::ACCESS_API->value], Carbon::now()->addMinutes(config('sanctum.ac_expiration')));
+        $refreshToken = $user->createToken('refresh_token', [TokenAbility::ISSUE_ACCESS_TOKEN->value], Carbon::now()->addMinutes(config('sanctum.rt_expiration')));
 
         return response()->json([
-            'accessToken' => $accessToken,
-            'refreshToken' => $refreshToken,
+            'accessToken' => $accessToken->plainTextToken,
+            'refreshToken' => $refreshToken->plainTextToken,
         ], Response::HTTP_OK);
     }
 }
