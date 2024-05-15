@@ -5,15 +5,19 @@ namespace App\Http\Controllers\Product;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Product\ProductService;
 
 class ProductController extends Controller
 {
+    public function __construct(private ProductService $service)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return $this->service->index();
     }
 
     /**

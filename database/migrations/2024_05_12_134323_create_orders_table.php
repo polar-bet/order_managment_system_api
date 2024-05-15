@@ -20,6 +20,7 @@ return new class extends Migration
             $table->mediumText('destination');
             $table->tinyInteger('status');
             $table->integer('count');
+            $table->decimal('price');
             $table->timestamps();
         });
     }

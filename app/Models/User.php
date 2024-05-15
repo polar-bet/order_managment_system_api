@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRole;
 use App\Models\Chat;
 use App\Models\Order;
 use App\Models\Product;
