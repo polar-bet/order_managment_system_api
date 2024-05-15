@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Product;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ProductResource;
 use App\Services\Product\ProductService;
+use App\Http\Requests\Product\StoreRequest;
+use App\Http\Requests\Product\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -17,15 +21,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return $this->service->index();
+        return ProductResource::collection($this->service->index());
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        return ProductResource::make($this->service->post($request));
     }
 
     /**
@@ -33,15 +37,15 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return ProductResource::make($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        //
+        return ProductResource::make($this->service->update($request, $product));
     }
 
     /**
@@ -49,6 +53,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $this->service->delete($product);
+
+        return response()->noContent();
     }
 }

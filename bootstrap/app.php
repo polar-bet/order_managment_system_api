@@ -14,7 +14,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // $middleware->append(CheckTokenAbilities::class);
         $middleware->alias(['ability' => CheckForAnyAbility::class]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
