@@ -17,6 +17,7 @@ class Order extends Model
         'destination',
         'status',
         'count',
+        'price'
     ];
 
     protected $casts = [

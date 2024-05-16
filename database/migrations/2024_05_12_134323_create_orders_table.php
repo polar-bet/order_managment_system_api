@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OrderStatus;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Schema;
@@ -18,9 +19,9 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Product::class);
             $table->mediumText('destination');
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(OrderStatus::SENT->value);
             $table->integer('count');
-            $table->decimal('price');
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }

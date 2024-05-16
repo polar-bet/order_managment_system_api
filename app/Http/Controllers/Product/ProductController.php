@@ -29,7 +29,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        return ProductResource::make($this->service->post($request));
+        return ProductResource::make($this->service->store($request));
     }
 
     /**

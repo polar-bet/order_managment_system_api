@@ -14,7 +14,7 @@ class ProductService
     }
 
 
-    public function post(ProductRequest $request)
+    public function store(ProductRequest $request)
     {
         $data = $request->validated();
 

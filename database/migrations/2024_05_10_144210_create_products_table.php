@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Category::class);
             $table->foreignIdFor(User::class);
             $table->mediumText('name');
-            $table->decimal('price');
+            $table->decimal('price', 10, 2);
             $table->integer('count');
             $table->timestamps();
         });
