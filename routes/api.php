@@ -1,13 +1,15 @@
 <?php
 
 use App\Enums\TokenAbility;
-use App\Http\Controllers\Account\AccountController;
-use App\Http\Controllers\Category\CategoryController;
-use App\Http\Controllers\Order\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Role\RoleController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Account\AccountController;
+use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\UserRole\UserRoleController;
 
 Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value], function () {
     Route::get('/user', fn (Request $request) => $request->user());
@@ -23,6 +25,8 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_
 Route::apiResource('product', ProductController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('category', CategoryController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('role', RoleController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('user', UserController::class)->only(['index', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('user.role', UserRoleController::class)->only('update')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('order', OrderController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 
 Route::group(['controller' => AccountController::class], function () {
