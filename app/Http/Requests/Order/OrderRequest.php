@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Order;
 
+use App\Models\Product;
+use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\ValidationRule;
 
 class OrderRequest extends FormRequest
 {
@@ -26,5 +29,16 @@ class OrderRequest extends FormRequest
             'destination' => ['required', 'string'],
             'count' => ['required', 'integer', 'min:0'],
         ];
+    }
+
+    protected function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            $product = Product::find($this->product_id);
+
+            if ($product && $this->count > $product->count) {
+                $validator->errors()->add('count', 'Запитувана кількість перевищує наявний запас.');
+            }
+        });
     }
 }

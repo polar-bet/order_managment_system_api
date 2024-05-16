@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Enums\OrderStatus;
 use App\Http\Requests\Order\OrderRequest;
 use App\Models\Order;
 use App\Models\Product;
@@ -12,6 +13,24 @@ class OrderService
     public function index()
     {
         return auth()->user()->orders;
+    }
+
+    public function requestOrderIndex()
+    {
+        $orders = Order::whereHas('product', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->get();
+
+        return $orders;
+    }
+
+    public function changeStatus(Order $order, OrderStatus $status)
+    {
+        $order->update([
+            'status' => $status->value
+        ]);
+
+        return $order;
     }
 
     public function store(OrderRequest $request)

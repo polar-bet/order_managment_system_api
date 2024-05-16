@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Order;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,7 +20,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return OrderResource::make($this->service->index());
+        return OrderResource::collection($this->service->index());
     }
 
     /**
@@ -54,5 +55,30 @@ class OrderController extends Controller
         $order->delete();
 
         return response()->noContent();
+    }
+
+    public function requestOrderIndex()
+    {
+        return OrderResource::collection($this->service->requestOrderIndex());
+    }
+
+    public function delivered(Request $request, Order $order)
+    {
+        return OrderResource::make($this->service->changeStatus($order, OrderStatus::DELIVERED));
+    }
+
+    public function execute(Request $request, Order $order)
+    {
+        return OrderResource::make($this->service->changeStatus($order, OrderStatus::IN_PROGRESS));
+    }
+
+    public function approve(Request $request, Order $order)
+    {
+        return OrderResource::make($this->service->changeStatus($order, OrderStatus::APPROVED));
+    }
+
+    public function decline(Request $request, Order $order)
+    {
+        return OrderResource::make($this->service->changeStatus($order, OrderStatus::DECLINED));
     }
 }

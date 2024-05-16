@@ -8,6 +8,7 @@ enum OrderStatus: int
     case APPROVED = 2;
     case IN_PROGRESS = 3;
     case DELIVERED = 4;
+    case DECLINED = 5;
 
     public function isSent(): bool
     {
@@ -27,5 +28,9 @@ enum OrderStatus: int
     public function isDelivered(): bool
     {
         return $this === self::DELIVERED;
+    }
+    public function isDeclined(): bool
+    {
+        return $this === self::DECLINED;
     }
 }
