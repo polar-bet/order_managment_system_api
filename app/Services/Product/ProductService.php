@@ -13,6 +13,10 @@ class ProductService
         return Product::all();
     }
 
+    public function traderProductIndex()
+    {
+        return auth()->user()->products;
+    }
 
     public function store(ProductRequest $request)
     {

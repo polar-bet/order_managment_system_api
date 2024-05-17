@@ -15,13 +15,17 @@ class OrderService
         return auth()->user()->orders;
     }
 
-    public function requestOrderIndex()
-    {
-        $orders = Order::whereHas('product', function ($query) {
-            $query->where('user_id', auth()->user()->id);
-        })->get();
 
-        return $orders;
+    public function approvedOrderIndex()
+    {
+        return Order::all()->whereIn('status', [OrderStatus::APPROVED->value, OrderStatus::IN_PROGRESS->value]);
+    }
+
+    public function requestedOrderIndex()
+    {
+        return Order::whereHas('product', function ($query) {
+            $query->where('user_id', auth()->user()->id);
+        })->where('status', OrderStatus::SENT->value)->get();
     }
 
     public function changeStatus(Order $order, OrderStatus $status)

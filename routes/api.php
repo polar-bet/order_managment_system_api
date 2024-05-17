@@ -5,28 +5,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Admin\User\UserController as AdminUserController;
 use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Admin\Order\OrderController as AdminOrderController;
+use App\Http\Controllers\Trader\Order\OrderController as TraderOrderController;
 use App\Http\Controllers\Account\AccountController;
+use App\Http\Controllers\Trader\Product\ProductController as TraderProductController;
 use App\Http\Controllers\Product\ProductController;
-use App\Http\Controllers\Category\CategoryController;
+use App\Http\Controllers\Admin\Category\CategoryController;
 use App\Http\Controllers\UserRole\UserRoleController;
 
 Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value], function () {
-    Route::get('/user', fn (Request $request) => $request->user());
-    Route::group(['controller' => OrderController::class], function () {
-        Route::get('/order/request', 'requestOrderIndex');
-        Route::put('/order/{order}/approve', 'approve');
-        Route::put('/order/{order}/decline', 'decline');
-        Route::put('/order/{order}/delivered', 'delivered');
-        Route::put('/order/{order}/execute', 'execute');
+    Route::get('/user/current', fn (Request $request) => $request->user());
+    Route::put('/user/trader-account', [UserController::class, 'changeAccount']);
+
+    Route::group(['prefix' => '/order/{order}'], function () {
+        Route::put('/approve', [TraderOrderController::class, 'approve']);
+        Route::put('/decline', [OrderController::class, 'decline']);
+        Route::put('/execute', [AdminOrderController::class, 'execute']);
+        Route::put('/delivered', [AdminOrderController::class, 'delivered']);
     });
 });
 
+Route::apiResource('admin/user', AdminUserController::class)->only('update')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('admin/order', AdminOrderController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('trader/order', TraderOrderController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('trader/product', TraderProductController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('product', ProductController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('category', CategoryController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('role', RoleController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('user', UserController::class)->only(['index', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
-Route::apiResource('user.role', UserRoleController::class)->only('update')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('order', OrderController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 
 Route::group(['controller' => AccountController::class], function () {

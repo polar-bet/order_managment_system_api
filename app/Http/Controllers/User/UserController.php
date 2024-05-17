@@ -24,4 +24,9 @@ class UserController extends Controller
     {
         return UserResource::make($this->service->update($request, $user));
     }
+
+    public function changeAccount()
+    {
+        return UserResource::make($this->service->changeAccount());
+    }
 }

@@ -24,37 +24,9 @@ class ProductController extends Controller
         return ProductResource::collection($this->service->index());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(ProductRequest $request)
-    {
-        return ProductResource::make($this->service->store($request));
-    }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Product $product)
     {
         return ProductResource::make($product);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ProductRequest $request, Product $product)
-    {
-        return ProductResource::make($this->service->update($request, $product));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
-    {
-        $this->service->delete($product);
-
-        return response()->noContent();
     }
 }
