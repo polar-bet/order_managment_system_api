@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\OrderRequest;
 use App\Http\Resources\OrderResource;
+use App\Services\Chat\ChatService;
 use App\Services\Order\OrderService;
 
 class OrderController extends Controller

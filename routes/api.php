@@ -13,7 +13,8 @@ use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Trader\Product\ProductController as TraderProductController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Admin\Category\CategoryController;
-use App\Http\Controllers\UserRole\UserRoleController;
+use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Message\MessageController;
 
 Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value], function () {
     Route::get('/user/current', fn (Request $request) => $request->user());
@@ -36,6 +37,9 @@ Route::apiResource('category', CategoryController::class)->middleware(['auth:san
 Route::apiResource('role', RoleController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('user', UserController::class)->only(['index', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('order', OrderController::class)->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('chat', ChatController::class)->except(['store', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('chat.message', MessageController::class)->only(['store'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('message', MessageController::class)->only(['update', 'destroy'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 
 Route::group(['controller' => AccountController::class], function () {
     Route::post('/login', 'login')->middleware('guest:sanctum');

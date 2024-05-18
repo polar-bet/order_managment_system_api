@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chat_users', function (Blueprint $table) {
+        Schema::create('chat_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Chat::class);
+            $table->foreignIdFor(User::class)->cascadeOnDelete();
+            $table->foreignIdFor(Chat::class)->cascadeOnDelete();
             $table->timestamps();
         });
     }

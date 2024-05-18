@@ -5,39 +5,29 @@ namespace App\Http\Controllers\Chat;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ChatResource;
+use App\Services\Chat\ChatService;
 
 class ChatController extends Controller
 {
+    public function __construct(private ChatService $service)
+    {
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return ChatResource::collection($this->service->index());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
      */
     public function show(Chat $chat)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Chat $chat)
-    {
-        //
+        return ChatResource::make($chat);
     }
 
     /**
@@ -45,6 +35,8 @@ class ChatController extends Controller
      */
     public function destroy(Chat $chat)
     {
-        //
+        $chat->delete();
+
+        return response()->noContent();
     }
 }

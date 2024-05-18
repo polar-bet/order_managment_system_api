@@ -2,14 +2,18 @@
 
 namespace App\Services\Order;
 
-use App\Enums\OrderStatus;
-use App\Http\Requests\Order\OrderRequest;
 use App\Models\Order;
 use App\Models\Product;
+use App\Enums\OrderStatus;
 use Ramsey\Uuid\Type\Decimal;
+use App\Services\Chat\ChatService;
+use App\Http\Requests\Order\OrderRequest;
 
 class OrderService
 {
+    public function __construct(private ChatService $chatService)
+    {
+    }
     public function index()
     {
         return auth()->user()->orders;
@@ -42,6 +46,10 @@ class OrderService
         $data = $request->validated();
 
         $data['user_id'] = auth()->user()->id;
+
+        $product = Product::find($data['product_id']);
+
+        $this->chatService->store($product->user);
 
         $data['price'] = $this->calculateOrderTotal($data['product_id'], $data['count']);
 
