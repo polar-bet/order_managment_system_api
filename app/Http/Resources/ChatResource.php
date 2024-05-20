@@ -17,7 +17,7 @@ class ChatResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->interlocutor()?->name,
+            'interlocutor' => UserResource::make($this->interlocutor()),
             'messages' => MessageResource::collection($this->messages)
         ];
     }

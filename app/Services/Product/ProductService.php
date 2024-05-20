@@ -35,9 +35,4 @@ class ProductService
 
         return $product;
     }
-
-    public function delete(Product $product)
-    {
-        $product->delete();
-    }
 }

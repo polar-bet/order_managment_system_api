@@ -3,6 +3,7 @@
 namespace App\Services\Message;
 
 use App\Enums\MessageStatus;
+use App\Events\MessageSent;
 use App\Http\Requests\Message\MessageRequest;
 use App\Http\Resources\MessageResource;
 use App\Models\Chat;
@@ -19,6 +20,8 @@ class MessageService
         $data['status'] = MessageStatus::SENT->value;
 
         $message = $chat->messages()->create($data);
+
+        event(new MessageSent($message));
 
         return $message;
     }

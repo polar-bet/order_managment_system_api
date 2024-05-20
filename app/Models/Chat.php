@@ -26,4 +26,9 @@ class Chat extends Model
     {
         return $this->users->except(auth()->user()->id)?->first();
     }
+
+    public function hasUser(User $user)
+    {
+        return $this->users->contains($user);
+    }
 }

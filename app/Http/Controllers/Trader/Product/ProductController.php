@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Trader\Product;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductDeleteRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ProductResource;
 use App\Services\Product\ProductService;
@@ -51,9 +52,11 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(ProductDeleteRequest $request)
     {
-        $this->service->delete($product);
+        $data = $request->validated();
+
+        Product::destroy($data);
 
         return response()->noContent();
     }
