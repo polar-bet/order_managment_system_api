@@ -2,18 +2,18 @@
 
 namespace App\Enums;
 
-enum RoleEnum: string
+enum RoleEnum: int
 {
-    case ADMIN = 'admin';
-    case TRADER = 'trader';
-    case USER = 'user';
+    case ADMIN = 1;
+    case TRADER = 2;
+    case USER = 3;
 
-    public function index(): int
+    public function label(): string
     {
         return match ($this) {
-            self::ADMIN => 1,
-            self::TRADER => 2,
-            self::USER => 3,
+            self::ADMIN => 'admin',
+            self::TRADER => 'trader',
+            self::USER => 'user',
         };
     }
 

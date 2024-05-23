@@ -56,7 +56,7 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
-        Product::destroy($data);
+        Product::destroy($data['products']);
 
         return response()->noContent();
     }

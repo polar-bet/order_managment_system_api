@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Account;
+namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegistrationRequest extends FormRequest
+class OrderDeleteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class RegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'username' => ['required', 'string', 'max:30'],
-            'name' => ['required', 'string', 'max:30'],
-            'email' => ['required', 'email', 'unique:users,email,NULL,id'],
-            'password' => ['required', 'confirmed', 'min:8', 'max:30'],
+            'orders' => ['required', 'array'],
+            'orders.*' => ['required', 'integer', 'exists:orders,id']
         ];
     }
 }

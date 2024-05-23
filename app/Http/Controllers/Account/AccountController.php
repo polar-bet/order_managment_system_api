@@ -7,11 +7,17 @@ use App\Http\Controllers\Controller;
 use App\Services\Account\AccountService;
 use App\Http\Requests\Account\LoginRequest;
 use App\Http\Requests\Account\RegistrationRequest;
+use App\Http\Resources\UserResource;
 
 class AccountController extends Controller
 {
     public function __construct(private AccountService $service)
     {
+    }
+
+    public function currentUser()
+    {
+        return UserResource::make(auth()->user());
     }
 
     public function login(LoginRequest $request)

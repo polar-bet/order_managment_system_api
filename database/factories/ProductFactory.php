@@ -22,7 +22,7 @@ class ProductFactory extends Factory
         return [
             'name' => fake()->name(),
             'category_id' => Category::all()->random()->id,
-            'user_id' => User::whereHas('role', fn ($role) => $role->where('name', RoleEnum::TRADER->value))->inRandomOrder()->value('id'),
+            'user_id' => User::where('role_id', RoleEnum::TRADER->value)->inRandomOrder()->value('id'),
             'price' => fake()->randomFloat(2, 0, 100000),
             'count' => fake()->numberBetween(0, 1000)
         ];

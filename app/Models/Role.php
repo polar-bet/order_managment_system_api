@@ -16,10 +16,6 @@ class Role extends Model
         'name'
     ];
 
-    protected $casts = [
-        'name' => RoleEnum::class
-    ];
-
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

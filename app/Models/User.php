@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Casts\UserCast;
 use App\Enums\RoleEnum;
 use App\Enums\UserRole;
 use App\Models\Chat;
@@ -33,6 +34,10 @@ class User extends Authenticatable
         'role_id',
     ];
 
+    protected $casts = [
+        'role_id' => UserCast::class
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -52,7 +57,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed'
+            'password' => 'hashed',
         ];
     }
 

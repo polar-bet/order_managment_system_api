@@ -51,7 +51,9 @@ class OrderService
 
         $this->chatService->store($product->user);
 
-        $data['price'] = $this->calculateOrderTotal($data['product_id'], $data['count']);
+        $data['status'] = OrderStatus::SENT->value;
+
+        $data['price'] = $this->calculateOrderTotal($product, $data['count']);
 
         return Order::create($data);
     }
@@ -65,10 +67,8 @@ class OrderService
         return $order;
     }
 
-    public function calculateOrderTotal(int $productId, int $count): float
+    public function calculateOrderTotal(Product $product, int $count)
     {
-        $product = Product::find($productId);
-
         return $product->price * $count;
     }
 }

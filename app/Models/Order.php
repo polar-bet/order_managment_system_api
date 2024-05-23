@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\OrderCast;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'status' => OrderStatus::class
+        'status' => OrderCast::class
     ];
 
     public function user(): BelongsTo

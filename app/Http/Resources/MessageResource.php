@@ -18,7 +18,7 @@ class MessageResource extends JsonResource
     {
         return [
             'content' => $this->content,
-            'is_read' => MessageStatus::isRead($this->status->value),
+            'is_read' => MessageStatus::isRead($this->status),
             'is_owner' => $this->user_id === auth()->user()->id
         ];
     }

@@ -7,8 +7,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\OrderRequest;
+use App\Http\Requests\Order\OrderDeleteRequest;
 use App\Http\Resources\OrderResource;
-use App\Services\Chat\ChatService;
 use App\Services\Order\OrderService;
 
 class OrderController extends Controller
@@ -37,9 +37,11 @@ class OrderController extends Controller
         return OrderResource::make($this->service->update($request, $order));
     }
 
-    public function destroy(Order $order)
+    public function destroy(OrderDeleteRequest $request)
     {
-        $order->delete();
+        $data = $request->validated();
+
+        Order::destroy($data['orders']);
 
         return response()->noContent();
     }

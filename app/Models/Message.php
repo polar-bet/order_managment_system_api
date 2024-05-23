@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\MessageCast;
 use App\Enums\MessageStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,9 +19,9 @@ class Message extends Model
         'status'
     ];
 
-    protected $casts = [
-        'status' => MessageStatus::class
-    ];
+    // protected $casts = [
+    //     'status' => MessageCast::class
+    // ];
 
 
     public function chat(): BelongsTo

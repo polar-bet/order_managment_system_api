@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin\Category;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Category\CategoryRequest;
+use App\Http\Requests\Category\CategoryDeleteRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\Category\CategoryService;
 
@@ -49,9 +49,11 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(CategoryDeleteRequest $request)
     {
-        $category->delete();
+        $data = $request->validated();
+
+        Category::destroy($data['categories']);
 
         return response()->noContent();
     }
