@@ -28,9 +28,14 @@ class Product extends Model
     {
         return $this->hasMany(Order::class);
     }
-    
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->user->is(auth()->user());
     }
 }

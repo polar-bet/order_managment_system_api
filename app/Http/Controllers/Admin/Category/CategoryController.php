@@ -8,6 +8,7 @@ use App\Http\Requests\Category\CategoryRequest;
 use App\Http\Requests\Category\CategoryDeleteRequest;
 use App\Http\Resources\CategoryResource;
 use App\Services\Category\CategoryService;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -27,6 +28,8 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
+        Gate::authorize('create', Category::class);
+
         return CategoryResource::make($this->service->store($request));
     }
 
@@ -43,6 +46,8 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
+        Gate::authorize('update', $category);
+
         return CategoryResource::make($this->service->update($request, $category));
     }
 
@@ -51,6 +56,8 @@ class CategoryController extends Controller
      */
     public function destroy(CategoryDeleteRequest $request)
     {
+        Gate::authorize('delete', Category::class);
+
         $data = $request->validated();
 
         Category::destroy($data['categories']);

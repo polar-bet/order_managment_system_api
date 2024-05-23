@@ -34,4 +34,34 @@ class Order extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function isOwner(): bool
+    {
+        return $this->user->is(auth()->user());
+    }
+
+    public function isSent(): bool
+    {
+        return OrderStatus::from($this->status)->isSent();
+    }
+
+    public function isApproved(): bool
+    {
+        return OrderStatus::from($this->status)->isApproved();
+    }
+
+    public function isInProgress(): bool
+    {
+        return OrderStatus::from($this->status)->isInProgress();
+    }
+
+    public function isDelivered(): bool
+    {
+        return OrderStatus::from($this->status)->isDelivered();
+    }
+
+    public function isDeclined(): bool
+    {
+        return OrderStatus::from($this->status)->isDeclined();
+    }
 }

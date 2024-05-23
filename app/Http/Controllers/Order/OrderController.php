@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Order;
 
-use App\Enums\OrderStatus;
 use App\Models\Order;
+use App\Enums\OrderStatus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Services\Order\OrderService;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\OrderResource;
 use App\Http\Requests\Order\OrderRequest;
 use App\Http\Requests\Order\OrderDeleteRequest;
-use App\Http\Resources\OrderResource;
-use App\Services\Order\OrderService;
 
 class OrderController extends Controller
 {
@@ -34,11 +35,15 @@ class OrderController extends Controller
 
     public function update(OrderRequest $request, Order $order)
     {
+        Gate::authorize('update', $order);
+
         return OrderResource::make($this->service->update($request, $order));
     }
 
     public function destroy(OrderDeleteRequest $request)
     {
+        Gate::authorize('delete', Order::class);
+
         $data = $request->validated();
 
         Order::destroy($data['orders']);
@@ -48,6 +53,8 @@ class OrderController extends Controller
 
     public function decline(Request $request, Order $order)
     {
+        Gate::authorize('decline', $order);
+
         return OrderResource::make($this->service->changeStatus($order, OrderStatus::DECLINED));
     }
 }

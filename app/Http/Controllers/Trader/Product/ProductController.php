@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Trader\Product;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\ProductDeleteRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\ProductResource;
 use App\Services\Product\ProductService;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\ProductRequest;
+use App\Http\Requests\Product\ProductDeleteRequest;
 
 class ProductController extends Controller
 {
@@ -22,6 +23,8 @@ class ProductController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Product::class);
+
         return ProductResource::collection($this->service->traderProductIndex());
     }
 
@@ -30,6 +33,8 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        Gate::authorize('create', Product::class);
+
         return ProductResource::make($this->service->store($request));
     }
 
@@ -46,6 +51,8 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
+        Gate::authorize('update', $product);
+
         return ProductResource::make($this->service->update($request, $product));
     }
 
@@ -54,6 +61,8 @@ class ProductController extends Controller
      */
     public function destroy(ProductDeleteRequest $request)
     {
+        Gate::authorize('delete', Product::class);
+
         $data = $request->validated();
 
         Product::destroy($data['products']);

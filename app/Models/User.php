@@ -34,9 +34,9 @@ class User extends Authenticatable
         'role_id',
     ];
 
-    protected $casts = [
-        'role_id' => UserCast::class
-    ];
+    // protected $casts = [
+    //     'role_id' => UserCast::class
+    // ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -84,5 +84,24 @@ class User extends Authenticatable
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function isAdmin(): bool
+    {
+        return RoleEnum::from($this->role->id)->isAdmin();
+    }
+
+    public function isTrader(): bool
+    {
+        return RoleEnum::from($this->role->id)->isTrader();
+    }
+    public function isDefaultUser(): bool
+    {
+        return RoleEnum::from($this->role->id)->isUser();
+    }
+
+    public function isBelongsToChat(Chat $chat)
+    {
+        return auth()->user()->chats->contains($chat);
     }
 }

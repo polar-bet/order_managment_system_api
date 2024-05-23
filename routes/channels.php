@@ -14,5 +14,5 @@ Broadcast::channel('user-status', function ($user) {
 });
 
 Broadcast::channel('chat.{chat}', function (User $user, Chat $chat) {
-    return $chat->hasUser($user);
+    return $user->isBelongsToChat($chat);
 });

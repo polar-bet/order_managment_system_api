@@ -33,4 +33,9 @@ class Message extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function isOwner(): bool
+    {
+        return $this->user->is(auth()->user());
+    }
 }

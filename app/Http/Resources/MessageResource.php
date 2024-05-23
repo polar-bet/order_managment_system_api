@@ -17,9 +17,10 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'content' => $this->content,
             'is_read' => MessageStatus::isRead($this->status),
-            'is_owner' => $this->user_id === auth()->user()->id
+            'is_owner' => $this->isOwner()
         ];
     }
 }
