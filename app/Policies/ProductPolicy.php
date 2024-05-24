@@ -39,9 +39,12 @@ class ProductPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Product $product): bool
+    public function delete(User $user, array $products): bool
     {
-        return $product->isOwner()
-            && $user->isAdmin();
+        $isOwner = !Product::findMany($products)
+            ->doesntContain('user_id', $user->id);
+
+        return $user->isAdmin()
+            || $isOwner;
     }
 }

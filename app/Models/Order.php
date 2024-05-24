@@ -21,9 +21,9 @@ class Order extends Model
         'price'
     ];
 
-    protected $casts = [
-        'status' => OrderCast::class
-    ];
+    // protected $casts = [
+    //     'status' => OrderCast::class
+    // ];
 
     public function user(): BelongsTo
     {
@@ -64,4 +64,5 @@ class Order extends Model
     {
         return OrderStatus::from($this->status)->isDeclined();
     }
+    
 }

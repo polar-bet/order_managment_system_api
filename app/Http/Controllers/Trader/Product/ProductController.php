@@ -61,9 +61,10 @@ class ProductController extends Controller
      */
     public function destroy(ProductDeleteRequest $request)
     {
-        Gate::authorize('delete', Product::class);
 
         $data = $request->validated();
+
+        Gate::authorize('delete', [Product::class, $data['products']]);
 
         Product::destroy($data['products']);
 

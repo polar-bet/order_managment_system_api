@@ -38,9 +38,9 @@ class UserService
         $user = auth()->user();
 
         $user->update([
-            'role_id' => RoleEnum::TRADER->index()
+            'role_id' => RoleEnum::TRADER->value
         ]);
 
-        return $user;
+        return User::find($user->id);
     }
 }

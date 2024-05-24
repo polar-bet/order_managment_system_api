@@ -22,9 +22,8 @@ class UserPolicy
             || $user->is($model);
     }
 
-    public function changeAccount(User $user, User $model): bool
+    public function changeAccount(User $user): bool
     {
-        return $user->is($model)
-            && $user->isDefaultUser();
+        return $user->isDefaultUser();
     }
 }

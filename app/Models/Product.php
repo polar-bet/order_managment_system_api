@@ -38,4 +38,5 @@ class Product extends Model
     {
         return $this->user->is(auth()->user());
     }
+    
 }

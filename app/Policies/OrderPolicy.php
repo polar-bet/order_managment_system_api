@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\User;
 
@@ -39,11 +40,18 @@ class OrderPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Order $order): bool
+    public function delete(User $user, array $arr): bool
     {
-        return $order->isOwner()
-            && $order->isSent()
-            && $order->isDeclined();
+        $orders = Order::findMany($arr);
+
+        $isNotInProgress = $orders->every(function ($order) {
+            return $order->isSent() || $order->isDeclined();
+        });
+
+        $isOwner = !$orders->doesntContain('user_id', $user->id);
+
+        return $isOwner
+            && $isNotInProgress;
     }
 
     public function decline(User $user, Order $order): bool

@@ -42,9 +42,9 @@ class OrderController extends Controller
 
     public function destroy(OrderDeleteRequest $request)
     {
-        Gate::authorize('delete', Order::class);
-
         $data = $request->validated();
+
+        Gate::authorize('delete', [Order::class, $data['orders']]);
 
         Order::destroy($data['orders']);
 

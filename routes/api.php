@@ -32,7 +32,7 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_
     });
 });
 
-Route::apiResource('admin/user', AdminUserController::class)->only('update')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('admin/user', AdminUserController::class)->only(['index', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('admin/order', AdminOrderController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('trader/order', TraderOrderController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('trader/product', TraderProductController::class)->except('destroy')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
@@ -40,7 +40,7 @@ Route::apiResource('admin/category', AdminCategoryController::class)->except('de
 Route::apiResource('product', ProductController::class)->only(['index', 'show'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('category', CategoryController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('role', RoleController::class)->only('index')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
-Route::apiResource('user', UserController::class)->only(['index', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
+Route::apiResource('user', UserController::class)->only('update')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('order', OrderController::class)->except('destroy')->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('chat', ChatController::class)->except(['store', 'update'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);
 Route::apiResource('chat.message', MessageController::class)->only(['store'])->middleware(['auth:sanctum', 'ability:' . TokenAbility::ACCESS_API->value]);

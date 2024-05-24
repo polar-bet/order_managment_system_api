@@ -8,6 +8,7 @@ use App\Enums\OrderStatus;
 use Ramsey\Uuid\Type\Decimal;
 use App\Services\Chat\ChatService;
 use App\Http\Requests\Order\OrderRequest;
+use Illuminate\Support\Facades\Http;
 
 class OrderService
 {
@@ -16,8 +17,28 @@ class OrderService
     }
     public function index()
     {
+        // $orders = auth()->user()->orders;
+
+        // foreach ($orders as $order) {
+        //     $order['destination'] = $this->getLocation($order['destination']);
+        // }
+
         return auth()->user()->orders;
     }
+
+    // public function getLocation(string $coordinate)
+    // {
+    //     [$lat, $lng] = explode(',', $coordinate);
+
+    //     $response = Http::get('https://nominatim.openstreetmap.org/reverse', [
+    //         'format' => 'json',
+    //         'lat' => $lat,
+    //         'lon' => $lng,
+    //         'addressdetails' => 1,
+    //     ]);
+
+    //     return $response;
+    // }
 
 
     public function approvedOrderIndex()
