@@ -11,11 +11,20 @@ use App\Services\Order\OrderService;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\OrderResource;
 use App\Http\Requests\Order\OrderRequest;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
     public function __construct(private OrderService $service)
     {
+    }
+
+    public function stats()
+    {
+        Gate::authorize('adminStats', Order::class);
+
+        return $this->service->adminStats();
     }
     /**
      * Display a listing of the resource.
@@ -31,7 +40,9 @@ class OrderController extends Controller
     {
         Gate::authorize('execute', $order);
 
-        return OrderResource::make($this->service->changeStatus($order, OrderStatus::IN_PROGRESS));
+        [$order, $product] = $this->service->changeStatus($order, OrderStatus::IN_PROGRESS);
+
+        return ['order' => OrderResource::make($order), 'product' => ProductResource::make($product)];
     }
 
     public function delivered(Request $request, Order $order)

@@ -80,13 +80,18 @@ class OrderPolicy
             && $user->isAdmin();
     }
 
-    public function adminIndex(User $user, Order $order): bool
+    public function adminIndex(User $user): bool
     {
         return $user->isAdmin();
     }
 
-    public function traderIndex(User $user, Order $order): bool
+    public function traderIndex(User $user): bool
     {
         return $user->isTrader();
+    }
+
+    public function adminStats(User $user)
+    {
+        return $user->isAdmin();
     }
 }

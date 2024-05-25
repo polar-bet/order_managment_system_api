@@ -7,8 +7,9 @@ use App\Models\Product;
 use App\Enums\OrderStatus;
 use Ramsey\Uuid\Type\Decimal;
 use App\Services\Chat\ChatService;
-use App\Http\Requests\Order\OrderRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Http\Requests\Order\OrderRequest;
 
 class OrderService
 {
@@ -41,6 +42,40 @@ class OrderService
     // }
 
 
+    public function stats()
+    {
+        $result = auth()->user()->orders()
+            ->selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'date' => $order->date,
+                    'quantity' => $order->count,
+                ];
+            });
+
+        return $result;
+    }
+
+    public function adminStats()
+    {
+        $result = Order::query()
+            ->selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'date' => $order->date,
+                    'quantity' => $order->count,
+                ];
+            });
+
+        return $result;
+    }
+
     public function approvedOrderIndex()
     {
         return Order::all()->whereIn('status', [OrderStatus::APPROVED->value, OrderStatus::IN_PROGRESS->value]);
@@ -59,7 +94,28 @@ class OrderService
             'status' => $status->value
         ]);
 
-        return $order;
+        $changedOrder = Order::find($order->id);
+
+        if (!$changedOrder->isInProgress()) {
+            return $changedOrder;
+        }
+
+        $changedProduct = $this->sendProduct($changedOrder);
+
+        return [$changedOrder, $changedProduct];
+    }
+
+    public function sendProduct(Order $order): Product
+    {
+        $product = $order->product;
+
+        $productsLeft = $product->count - $order->count;
+
+        $product->update([
+            'count' => $productsLeft
+        ]);
+
+        return Product::find($product->id);
     }
 
     public function store(OrderRequest $request)

@@ -10,6 +10,10 @@ class ProductService
 {
     public function index()
     {
+        if (auth()->user()->isTrader()) {
+            return Product::whereNot('user_id', auth()->user()->id)->get();
+        }
+
         return Product::all();
     }
 

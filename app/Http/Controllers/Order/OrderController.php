@@ -18,6 +18,11 @@ class OrderController extends Controller
     {
     }
 
+    public function stats()
+    {
+        return $this->service->stats();
+    }
+
     public function index()
     {
         return OrderResource::collection($this->service->index());

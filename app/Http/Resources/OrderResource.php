@@ -27,7 +27,8 @@ class OrderResource extends JsonResource
             ],
             'count' => $this->count,
             'price' => $this->price,
-            'is_not_accepted' => !$this->isSent()
+            'is_not_accepted' => !$this->isSent(),
+            'created_at' => $this->created_at->format('Y-m-d')
         ];
     }
 }

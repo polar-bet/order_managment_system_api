@@ -22,7 +22,9 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_
     Route::put('/user/trader-account', [UserController::class, 'changeAccount']);
     Route::delete('trader/product', [TraderProductController::class, 'destroy']);
     Route::delete('admin/category', [AdminCategoryController::class, 'destroy']);
+    Route::get('admin/stats', [AdminOrderController::class, 'stats']);
     Route::delete('order', [OrderController::class, 'destroy']);
+    Route::get('stats', [OrderController::class, 'stats']);
 
     Route::group(['prefix' => '/order/{order}'], function () {
         Route::put('/approve', [TraderOrderController::class, 'approve']);
