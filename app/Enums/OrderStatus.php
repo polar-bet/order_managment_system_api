@@ -10,6 +10,17 @@ enum OrderStatus: int
     case DELIVERED = 4;
     case DECLINED = 5;
 
+    public function name(): string
+    {
+        return match ($this) {
+            self::SENT => 'sent',
+            self::APPROVED => 'approved',
+            self::IN_PROGRESS => 'in_progress',
+            self::DELIVERED => 'delivered',
+            self::DECLINED => 'declined',
+        };
+    }
+
     public function label(): string
     {
         return match ($this) {

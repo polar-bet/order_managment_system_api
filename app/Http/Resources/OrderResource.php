@@ -19,7 +19,10 @@ class OrderResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'status' => OrderStatus::from($this->status)->label(),
+            'status' => [
+                'name' => OrderStatus::from($this->status)->name(),
+                'label' => OrderStatus::from($this->status)->label()
+            ],
             'product' => ProductResource::make($this->product),
             'destination' => [
                 'lat' => $lat,
@@ -27,7 +30,6 @@ class OrderResource extends JsonResource
             ],
             'count' => $this->count,
             'price' => $this->price,
-            'is_not_accepted' => !$this->isSent(),
             'created_at' => $this->created_at->format('Y-m-d')
         ];
     }

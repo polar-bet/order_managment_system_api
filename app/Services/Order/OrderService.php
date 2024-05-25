@@ -24,7 +24,7 @@ class OrderService
         //     $order['destination'] = $this->getLocation($order['destination']);
         // }
 
-        return auth()->user()->orders;
+        return auth()->user()->orders()->orderByDesc('created_at')->get();
     }
 
     // public function getLocation(string $coordinate)
@@ -85,7 +85,10 @@ class OrderService
     {
         return Order::whereHas('product', function ($query) {
             $query->where('user_id', auth()->user()->id);
-        })->where('status', OrderStatus::SENT->value)->get();
+        })
+            ->orderBy('status')
+            // ->where('status', OrderStatus::SENT->value)
+            ->get();
     }
 
     public function changeStatus(Order $order, OrderStatus $status)
@@ -138,6 +141,10 @@ class OrderService
     public function update(OrderRequest $request, Order $order)
     {
         $data = $request->validated();
+
+        $product = Product::find($data['product_id']);
+
+        $data['price'] = $this->calculateOrderTotal($product, $data['count']);
 
         $order->update($data);
 
