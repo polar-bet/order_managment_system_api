@@ -23,7 +23,7 @@ class ProductFactory extends Factory
             'name' => fake()->name(),
             'category_id' => Category::all()->random()->id,
             'user_id' => User::where('role_id', RoleEnum::TRADER->value)->inRandomOrder()->value('id'),
-            'price' => fake()->randomFloat(2, 0, 100000),
+            'price' => fake()->numberBetween(0, 100000),
             'count' => fake()->numberBetween(0, 1000)
         ];
     }

@@ -10,16 +10,18 @@ class ProductService
 {
     public function index()
     {
+        $query = Product::orderBy('updated_at');
+
         if (auth()->user()->isTrader()) {
-            return Product::whereNot('user_id', auth()->user()->id)->get();
+            return $query->whereNot('user_id', auth()->user()->id)->get();
         }
 
-        return Product::all();
+        return $query->get();
     }
 
     public function traderProductIndex()
     {
-        return auth()->user()->products;
+        return auth()->user()->products()->orderBy('updated_at')->get();
     }
 
     public function store(ProductRequest $request)

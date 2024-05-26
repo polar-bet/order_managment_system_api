@@ -21,7 +21,7 @@ return new class extends Migration
             $table->mediumText('destination');
             $table->tinyInteger('status')->default(OrderStatus::SENT->value);
             $table->integer('count');
-            $table->decimal('price', 10, 2);
+            $table->unsignedBigInteger('price');
             $table->timestamps();
         });
     }

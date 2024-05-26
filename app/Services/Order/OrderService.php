@@ -10,6 +10,8 @@ use App\Services\Chat\ChatService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Order\OrderRequest;
+use Exception;
+use Illuminate\Validation\ValidationException;
 
 class OrderService
 {
@@ -78,7 +80,8 @@ class OrderService
 
     public function approvedOrderIndex()
     {
-        return Order::all()->whereIn('status', [OrderStatus::APPROVED->value, OrderStatus::IN_PROGRESS->value]);
+        return Order::query()->orderByDesc('status')->get();
+        // ->whereIn('status', [OrderStatus::APPROVED->value, OrderStatus::IN_PROGRESS->value]);
     }
 
     public function requestedOrderIndex()
@@ -93,6 +96,16 @@ class OrderService
 
     public function changeStatus(Order $order, OrderStatus $status)
     {
+        $isExecuting = OrderStatus::from($status->value)->isInProgress();
+
+        if ($isExecuting && $order->product->count < $order->count) {
+            throw ValidationException::withMessages([
+                'errors' => [
+                    'message' => 'Недостатня кількість товарів, для виконання замовлення'
+                ]
+            ]);
+        }
+
         $order->update([
             'status' => $status->value
         ]);
@@ -118,7 +131,7 @@ class OrderService
             'count' => $productsLeft
         ]);
 
-        return Product::find($product->id);
+        return $product;
     }
 
     public function store(OrderRequest $request)

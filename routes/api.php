@@ -12,6 +12,7 @@ use App\Http\Controllers\Trader\Order\OrderController as TraderOrderController;
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Trader\Product\ProductController as TraderProductController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Admin\Product\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\Category\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Chat\ChatController;
@@ -22,6 +23,7 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_
     Route::put('/user/trader-account', [UserController::class, 'changeAccount']);
     Route::delete('trader/product', [TraderProductController::class, 'destroy']);
     Route::delete('admin/category', [AdminCategoryController::class, 'destroy']);
+    Route::delete('admin/product', [AdminProductController::class, 'destroy']);
     Route::get('admin/stats', [AdminOrderController::class, 'stats']);
     Route::delete('order', [OrderController::class, 'destroy']);
     Route::get('stats', [OrderController::class, 'stats']);
