@@ -3,11 +3,11 @@
 namespace App\Services\Message;
 
 use App\Enums\MessageStatus;
-use App\Events\MessageSent;
+use App\Events\StoreMessageEvent;
 use App\Http\Requests\Message\MessageRequest;
-use App\Http\Resources\MessageResource;
 use App\Models\Chat;
 use App\Models\Message;
+use Illuminate\Support\Facades\Log;
 
 class MessageService
 {
@@ -21,7 +21,9 @@ class MessageService
 
         $message = $chat->messages()->create($data);
 
-        event(new MessageSent($message));
+        event(new StoreMessageEvent($message));
+
+        Log::info('Message created and event fired', ['message' => $message]);
 
         return $message;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Chat;
 
+use App\Events\StoreChatEvent;
 use App\Models\Chat;
 
 class ChatService
@@ -17,8 +18,11 @@ class ChatService
             return;
         }
 
+
         $chat = auth()->user()->chats()->create();
 
         $chat->users()->attach($user->id);
+
+        event(new StoreChatEvent($chat->interlocutor()));
     }
 }

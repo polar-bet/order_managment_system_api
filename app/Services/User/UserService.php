@@ -12,7 +12,7 @@ class UserService
 {
     public function index()
     {
-        return User::all()->whereNotIn('id', auth()->user()->id);
+        return User::all()->where('id', '!=', auth()->user()->id);
     }
 
     public function update(UpdateRequest $request, User $user)

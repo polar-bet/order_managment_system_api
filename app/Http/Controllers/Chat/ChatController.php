@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Chat;
 
+use App\Events\DeleteChatEvent;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,6 +36,8 @@ class ChatController extends Controller
      */
     public function destroy(Chat $chat)
     {
+        event(new DeleteChatEvent($chat->id, $chat->interlocutor()->id));
+
         $chat->delete();
 
         return response()->noContent();

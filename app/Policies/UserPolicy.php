@@ -9,7 +9,7 @@ class UserPolicy
 {
 
 
-    public function viewAny(User $user, User $model): bool
+    public function viewAny(User $user): bool
     {
         return $user->isAdmin();
     }

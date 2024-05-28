@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\StoreMessageEvent;
 use App\Models\Order;
 use App\Models\Message;
 use App\Models\Category;
@@ -15,6 +16,7 @@ use App\Policies\RolePolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {

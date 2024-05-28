@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\MessageResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,18 +12,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+class DeleteMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public Message $message)
+    public function __construct(private int $chatId)
     {
+        //
     }
 
+    public function broadcastAs(): string
+    {
+        return 'delete_message';
+    }
     /**
      * Get the channels the event should broadcast on.
      *
@@ -31,7 +36,12 @@ class MessageSent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('chat.' . $this->message->chat->id),
+            new Channel('chat.' . $this->chatId),
         ];
     }
+
+    // public function broadcastWith(): array
+    // {
+    //     return MessageResource::make($this->message)->resolve();
+    // }
 }

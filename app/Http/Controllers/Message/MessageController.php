@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Message;
 
+use App\Events\DeleteMessageEvent;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Http\Controllers\Controller;
@@ -33,6 +34,8 @@ class MessageController extends Controller
     public function destroy(Message $message)
     {
         Gate::authorize('delete', $message);
+
+        event(new DeleteMessageEvent($message->chat->id));
 
         $message->delete();
 

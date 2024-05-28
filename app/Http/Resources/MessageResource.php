@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Enums\MessageStatus;
 use App\Models\Message;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,8 +20,10 @@ class MessageResource extends JsonResource
         return [
             'id' => $this->id,
             'content' => $this->content,
+            'chat_id' => $this->chat->id,
             'is_read' => MessageStatus::isRead($this->status),
-            'is_owner' => $this->isOwner()
+            'is_owner' => $this->isOwner(),
+            'created_at' => $this->created_at->format('H:i')
         ];
     }
 }
