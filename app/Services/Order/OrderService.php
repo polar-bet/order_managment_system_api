@@ -47,6 +47,7 @@ class OrderService
     public function stats()
     {
         $result = auth()->user()->orders()
+            ->withTrashed()
             ->selectRaw('DATE(created_at) as date, count(*) as count')
             ->groupBy('date')
             ->orderBy('date')
@@ -63,7 +64,7 @@ class OrderService
 
     public function adminStats()
     {
-        $result = Order::query()
+        $result = Order::withTrashed()
             ->selectRaw('DATE(created_at) as date, count(*) as count')
             ->groupBy('date')
             ->orderBy('date')
@@ -77,6 +78,27 @@ class OrderService
 
         return $result;
     }
+
+    public function traderStats()
+    {
+        $result = Order::withTrashed()
+            ->whereHas('product', function ($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'date' => $order->date,
+                    'quantity' => $order->count,
+                ];
+            });
+
+        return $result;
+    }
+
 
     public function approvedOrderIndex()
     {

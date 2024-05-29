@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('count');
             $table->unsignedBigInteger('price');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

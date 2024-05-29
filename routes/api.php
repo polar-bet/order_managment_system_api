@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth:sanctum', 'ability:' . TokenAbility::ACCESS_
     Route::delete('admin/category', [AdminCategoryController::class, 'destroy']);
     Route::delete('admin/product', [AdminProductController::class, 'destroy']);
     Route::get('admin/stats', [AdminOrderController::class, 'stats']);
+    Route::get('trader/stats', [TraderOrderController::class, 'stats']);
     Route::delete('order', [OrderController::class, 'destroy']);
     Route::get('stats', [OrderController::class, 'stats']);
 

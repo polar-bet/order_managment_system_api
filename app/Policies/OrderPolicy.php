@@ -45,7 +45,7 @@ class OrderPolicy
         $orders = Order::findMany($arr);
 
         $isNotInProgress = $orders->every(function ($order) {
-            return $order->isSent() || $order->isDeclined() || $order->isDelivered();
+            return !$order->isInProgress();
         });
 
         $isOwner = !$orders->doesntContain('user_id', $user->id);
@@ -93,5 +93,10 @@ class OrderPolicy
     public function adminStats(User $user)
     {
         return $user->isAdmin();
+    }
+
+    public function traderStats(User $user)
+    {
+        return $user->isTrader();
     }
 }

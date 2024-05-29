@@ -32,4 +32,11 @@ class OrderController extends Controller
 
         return OrderResource::make($this->service->changeStatus($order, OrderStatus::APPROVED));
     }
+
+    public function stats()
+    {
+        Gate::authorize('traderStats', Order::class);
+
+        return $this->service->traderStats();
+    }
 }
