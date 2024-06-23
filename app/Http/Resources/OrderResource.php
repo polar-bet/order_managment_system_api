@@ -25,7 +25,7 @@ class OrderResource extends JsonResource
             ],
             'product' => ProductResource::make($this->product),
             'destination' => [
-                'lat' => $lat,
+                'lat' => $lat,  
                 'lng' => $lng
             ],
             'count' => $this->count,

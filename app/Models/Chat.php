@@ -24,7 +24,7 @@ class Chat extends Model
 
     public function interlocutor()
     {
-        return $this->users->except(auth()->user()->id)?->first();
+        return $this->users->except(auth()->id())->first();
     }
 
     public function hasUser(User $user)

@@ -2,7 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\User;
+use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,16 +12,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserStatusChanged implements ShouldBroadcast
+class OrderStatusChangeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user, public $status)
+    public function __construct(private Order $order)
     {
         //
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'order_status_change';
     }
 
     /**
@@ -31,7 +37,13 @@ class UserStatusChanged implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('user-status'),
+            new Channel('user.' . $this->order->user->id),
+            new Channel('user.' . auth()->user()->id),
         ];
+    }
+
+    public function broadcastWith(): array
+    {
+        return OrderResource::make($this->order)->resolve();
     }
 }

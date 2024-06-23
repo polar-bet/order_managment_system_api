@@ -18,7 +18,7 @@ class DeleteChatEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(private int $chatId, private int $interlocutorId)
+    public function __construct(private int $chatId, private int $recipientId)
     {
         //
     }
@@ -36,8 +36,14 @@ class DeleteChatEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat.' . $this->chatId),
-            new Channel('trader.' . $this->interlocutorId),
+            new PrivateChannel('chat.' . $this->recipientId),
+        ];
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'id' => $this->chatId
         ];
     }
 }

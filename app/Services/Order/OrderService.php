@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Events\OrderStatusChangeEvent;
 use App\Models\Order;
 use App\Models\Product;
 use App\Enums\OrderStatus;
@@ -135,10 +136,14 @@ class OrderService
         $changedOrder = Order::find($order->id);
 
         if (!$changedOrder->isInProgress()) {
+            event(new OrderStatusChangeEvent($changedOrder));
+            
             return $changedOrder;
         }
 
         $changedProduct = $this->sendProduct($changedOrder);
+
+        event(new OrderStatusChangeEvent($changedOrder));
 
         return [$changedOrder, $changedProduct];
     }

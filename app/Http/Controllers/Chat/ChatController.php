@@ -36,7 +36,7 @@ class ChatController extends Controller
      */
     public function destroy(Chat $chat)
     {
-        event(new DeleteChatEvent($chat->id, $chat->interlocutor()->id));
+        broadcast(new DeleteChatEvent($chat->id, $chat->interlocutor()->id))->toOthers();
 
         $chat->delete();
 

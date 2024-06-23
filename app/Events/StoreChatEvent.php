@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Http\Resources\ChatResource;
 use App\Models\Chat;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -19,7 +20,7 @@ class StoreChatEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(private User $user)
+    public function __construct(private Chat $chat, private int $recipientId)
     {
         //
     }
@@ -37,7 +38,12 @@ class StoreChatEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('user.' . $this->user->id),
+            new PrivateChannel('chat.' . $this->recipientId),
         ];
+    }
+
+    public function broadcastWith(): array
+    {
+        return ChatResource::make($this->chat)->resolve();
     }
 }

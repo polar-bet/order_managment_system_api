@@ -23,6 +23,6 @@ class ChatService
 
         $chat->users()->attach($user->id);
 
-        event(new StoreChatEvent($chat->interlocutor()));
+        broadcast(new StoreChatEvent($chat, $chat->interlocutor()->id))->toOthers();
     }
 }

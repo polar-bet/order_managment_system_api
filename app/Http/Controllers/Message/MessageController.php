@@ -35,7 +35,7 @@ class MessageController extends Controller
     {
         Gate::authorize('delete', $message);
 
-        event(new DeleteMessageEvent($message->chat->id));
+        broadcast(new DeleteMessageEvent($message->chat->id, $message->id, $message->chat->interlocutor()->id))->toOthers();
 
         $message->delete();
 

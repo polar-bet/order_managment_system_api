@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Http\Resources\MessageResource;
+use App\Models\Chat;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -19,7 +20,7 @@ class DeleteMessageEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(private int $chatId)
+    public function __construct(private int $chatId, private int $messageId, private int $recipientId)
     {
         //
     }
@@ -36,12 +37,15 @@ class DeleteMessageEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('chat.' . $this->chatId),
+            new PrivateChannel('chat.' . $this->recipientId),
         ];
     }
 
-    // public function broadcastWith(): array
-    // {
-    //     return MessageResource::make($this->message)->resolve();
-    // }
+    public function broadcastWith(): array
+    {
+        return [
+            'id' => $this->messageId,
+            'chat_id' => $this->chatId,
+        ];
+    }
 }
