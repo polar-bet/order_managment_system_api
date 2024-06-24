@@ -6,11 +6,13 @@ use App\Events\OrderStatusChangeEvent;
 use App\Models\Order;
 use App\Models\Product;
 use App\Enums\OrderStatus;
+use App\Enums\RoleEnum;
 use Ramsey\Uuid\Type\Decimal;
 use App\Services\Chat\ChatService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Http\Requests\Order\OrderRequest;
+use App\Models\User;
 use Exception;
 use Illuminate\Validation\ValidationException;
 
@@ -136,16 +138,22 @@ class OrderService
         $changedOrder = Order::find($order->id);
 
         if (!$changedOrder->isInProgress()) {
-            event(new OrderStatusChangeEvent($changedOrder));
-            
+            $this->sendStatusChangeEvent($changedOrder);
             return $changedOrder;
         }
 
         $changedProduct = $this->sendProduct($changedOrder);
 
-        event(new OrderStatusChangeEvent($changedOrder));
+        $this->sendStatusChangeEvent($changedOrder);
 
         return [$changedOrder, $changedProduct];
+    }
+
+    public function sendStatusChangeEvent($order)
+    {
+        $userId = $order->user->id;
+
+        broadcast(new OrderStatusChangeEvent($order, $userId))->toOthers();
     }
 
     public function sendProduct(Order $order): Product

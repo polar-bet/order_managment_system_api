@@ -2,8 +2,10 @@
 
 namespace App\Events;
 
+use App\Enums\RoleEnum;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -19,7 +21,7 @@ class OrderStatusChangeEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(private Order $order)
+    public function __construct(private Order $order, private int $recipientId)
     {
         //
     }
@@ -37,8 +39,7 @@ class OrderStatusChangeEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('user.' . $this->order->user->id),
-            new Channel('user.' . auth()->user()->id),
+            new PrivateChannel('order.' . $this->recipientId)
         ];
     }
 

@@ -14,6 +14,10 @@ Broadcast::channel('chat.{recipientId}', function ($user, $recipientId) {
     return (int) $user->id === (int) $recipientId;
 });
 
+Broadcast::channel('order.{recipientId}', function ($user, $recipientId) {
+    return (int) $user->id === (int) $recipientId;
+});
+
 Broadcast::channel('active_users', function ($user) {
     return $user;
 });

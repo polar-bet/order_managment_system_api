@@ -10,7 +10,7 @@ class ProductService
 {
     public function index()
     {
-        $query = Product::orderBy('updated_at');
+        $query = Product::orderBy('updated_at')->where('count', '>', 0);
 
         if (auth()->user()->isTrader()) {
             return $query->whereNot('user_id', auth()->user()->id)->get();
